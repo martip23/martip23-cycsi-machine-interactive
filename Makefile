@@ -1,29 +1,43 @@
-# Makefile for C++ project
+DIRS    = lib src tests
 
-TARGET = test
+# tools used in this file
+RM      = rm -rf
 
-FILES 	=  $(wildcard *.cpp)
-OBJS 	=  $(FILES:.cpp=.o)
-ASMS 	= $(FILES:.cpp=.s)
+# targets below ------------------------------------
+all:
+		for dir in $(DIRS); do  \
+			($(MAKE) -C $$dir all); \
+		done
 
-# Tools
-GCC 	= g++
-RM 		= rm -f
-
-# Targets --------------------------
-all: 	$(TARGET)
-
-$(TARGET): $(OBJS)
-		$(GCC) -o $@  $^
-
-asm: 	$(ASMS)
-
+help:
+		@echo "run  'make <target>' where <target> is one of:"
+		@echo "  <blank>  to build applications"
+		@echo "  clean    to remove all inon-essential files"
+		@echo "  run      to run primary application"
+		@echo "  test     to run unit tests"
+		@echo "  html     to build web pages in 'build/html'"
+		@echo "  pdf      to build PDF docs in 'build'"
+ 
+# remove all build files before committing to Git
 clean:
-		$(RM) $(TARGET) $(OBJS) $(ASMS)
+		for dir in $(DIRS); do  \
+			($(MAKE) -C $$dir clean); \
+		done
+		$(RM) build/*
 
-#Implicit rules -------------------
-%.o: 	%.cpp
-	$(GCC) -c $< -o $@
+# run the primary application
+run:
+		$(MAKE) -C src run
 
-%.s: 	%.cpp
-	$(GCC) -S -nasm=intel $< -o $@
+# run the unit test set
+test:
+		$(MAKE) -C tests run
+
+# don't build docs unless specically asked 
+html:
+		$(MAKE) -C docs html
+
+pdf:
+		$(MAKE) -C docs pdf
+
+.PHONY: all clean run test html pdf
