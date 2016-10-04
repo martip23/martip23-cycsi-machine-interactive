@@ -1,11 +1,11 @@
 #pragma once
 
-class Machine {
+class Controller {
     public:
         int PC;             // program counter
         int MAXCYCLES;      // stop when cycle count reaches this
 
-        Machine();
+        Controller();
         int run(int maxcycles);
 };
 

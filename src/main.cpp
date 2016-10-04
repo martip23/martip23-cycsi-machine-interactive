@@ -1,9 +1,9 @@
 #include <iostream>
 using namespace std;
-#include "Machine.h"
+#include "Controller.h"
 
 int main(int argc, char *argv[]) {
-    Machine m;
+    Controller m;
 
     cout << "Cycsi (v2) running..." << endl;
     int cycles_run = m.run(10);
